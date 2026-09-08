@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Current Research Gaps | Partner Tracker{% endblock %}
+
+{% block content %}
+  <section class="page-intro" aria-labelledby="page-title">
+    <p class="eyebrow">Research coverage</p>
+    <h1 id="page-title">Current research gaps</h1>
+    <p class="lede">{{ items|length }} product areas where no direct, implementation-backed integration evidence has been verified.</p>
+  </section>
+
+  <section class="catalogue" aria-labelledby="results-heading">
+    <div class="results-summary">
+      <h2 id="results-heading">Open gaps</h2>
+      <p>{{ items|length }} records</p>
+    </div>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Current research gaps table">
+      <table>
+        <thead>
+          <tr>
+            <th>Partner</th>
+            <th>Product area</th>
+            <th>Gap</th>
+            <th>Last checked</th>
+            <th>Next check</th>
+            <th>Next action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+            <tr>
+              <td>{{ item.partner }}</td>
+              <td>{{ item.product_area }}</td>
+              <td>{{ item.gap_statement }}</td>
+              <td>{{ item.last_checked_date }}</td>
+              <td>{{ item.next_check_date or "Not scheduled" }}</td>
+              <td>{{ item.next_action or "Not recorded" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}

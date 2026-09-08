@@ -61,6 +61,20 @@ class StaticSiteTests(unittest.TestCase):
                 "published_date": None,
             },
         )
+        tracker.add_research_gap(
+            connection,
+            {
+                "partner_id": owner,
+                "product_area": "Amazon OpenSearch",
+                "gap_statement": "No direct technical example found.",
+                "status": "open",
+                "search_scope": "Official sources.",
+                "last_checked_date": "2026-09-08",
+                "next_check_date": "2026-12-08",
+                "next_action": "Recheck official examples.",
+                "resolution_item_id": None,
+            },
+        )
         tracker.add_item(
             connection,
             {
@@ -160,6 +174,7 @@ class StaticSiteTests(unittest.TestCase):
                 "assets/tables.js",
                 "index.html",
                 "integration-assets.html",
+                "research-gaps.html",
             },
         )
         index = (output / "index.html").read_text(encoding="utf-8")
@@ -167,6 +182,7 @@ class StaticSiteTests(unittest.TestCase):
             encoding="utf-8"
         )
         articles = (output / "articles.html").read_text(encoding="utf-8")
+        gaps = (output / "research-gaps.html").read_text(encoding="utf-8")
         self.assertIn('<p class="metric-label">AWS Integration Assets</p>', index)
         self.assertIn('<p class="metric-label">AWS Articles</p>', index)
         self.assertIn('<p class="metric-value">2</p>', index)
@@ -174,9 +190,10 @@ class StaticSiteTests(unittest.TestCase):
         self.assertNotIn("private/sample-path", integrations)
         self.assertNotIn("<script>alert('escaped')</script>", articles)
         self.assertIn("&lt;script&gt;alert", articles)
+        self.assertIn("Amazon OpenSearch", gaps)
 
         parser = LinkParser()
-        for page in (index, integrations, articles):
+        for page in (index, integrations, articles, gaps):
             parser.feed(page)
         self.assertFalse(any(link.startswith("/") for link in parser.links))
         self.assertFalse(any(link.startswith(("file:", "javascript:")) for link in parser.links))

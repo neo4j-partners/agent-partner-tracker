@@ -17,6 +17,7 @@ PARTNERS = ("AWS", "Databricks", "IBM")
 CONTENT_TYPES = ("local_sample", "repository", "public_reference")
 RELATIONSHIPS = ("direct", "supporting")
 ITEM_STATUSES = ("active", "watch", "excluded", "archived")
+GAP_STATUSES = ("open", "resolved", "no_evidence")
 REVIEW_STATUSES = ("in_progress", "complete", "no_change", "partial", "blocked")
 PUBLISHER_GROUPS = (
     "neo4j",
@@ -165,6 +166,20 @@ def initialize(connection: sqlite3.Connection) -> None:
             result_summary TEXT NOT NULL,
             next_action TEXT NOT NULL,
             UNIQUE(partner_id, review_identifier)
+        );
+
+        CREATE TABLE IF NOT EXISTS research_gaps (
+            id INTEGER PRIMARY KEY,
+            partner_id INTEGER NOT NULL REFERENCES partners(id),
+            product_area TEXT NOT NULL,
+            gap_statement TEXT NOT NULL,
+            status TEXT NOT NULL CHECK (status IN ('open', 'resolved', 'no_evidence')),
+            search_scope TEXT NOT NULL DEFAULT '',
+            last_checked_date TEXT NOT NULL,
+            next_check_date TEXT,
+            next_action TEXT NOT NULL DEFAULT '',
+            resolution_item_id INTEGER REFERENCES content_items(id),
+            UNIQUE(partner_id, product_area)
         );
 
         CREATE TABLE IF NOT EXISTS markdown_archives (
@@ -343,6 +358,68 @@ def export_markdown(rows: list[sqlite3.Row], partner: str) -> str:
         ]
         lines.append("| " + " | ".join(str(cell).replace("|", "\\|") for cell in cells) + " |")
     return "\n".join(lines)
+
+
+def add_research_gap(connection: sqlite3.Connection, values: dict[str, str | None]) -> int:
+    ensure_choice(str(values["status"]), GAP_STATUSES, "gap status")
+    values = values.copy()
+    values["last_checked_date"] = normalize_date(
+        values.get("last_checked_date"), "last checked date"
+    )
+    values["next_check_date"] = normalize_date(
+        values.get("next_check_date"), "next check date"
+    )
+    cursor = connection.execute(
+        f"INSERT INTO research_gaps ({', '.join(values)}) "
+        f"VALUES ({', '.join('?' for _ in values)})",
+        tuple(values.values()),
+    )
+    connection.commit()
+    return int(cursor.lastrowid)
+
+
+def update_research_gap(
+    connection: sqlite3.Connection, gap_id: int, changes: dict[str, str | None]
+) -> None:
+    if not changes:
+        raise ValueError("provide at least one field to update")
+    exists = connection.execute(
+        "SELECT 1 FROM research_gaps WHERE id = ?", (gap_id,)
+    ).fetchone()
+    if not exists:
+        raise ValueError(f"research gap {gap_id} does not exist")
+    if "status" in changes:
+        ensure_choice(str(changes["status"]), GAP_STATUSES, "gap status")
+    for key, label in (
+        ("last_checked_date", "last checked date"),
+        ("next_check_date", "next check date"),
+    ):
+        if key in changes:
+            changes[key] = normalize_date(changes[key], label)
+    keys = tuple(changes)
+    connection.execute(
+        f"UPDATE research_gaps SET {', '.join(f'{key} = ?' for key in keys)} WHERE id = ?",
+        (*[changes[key] for key in keys], gap_id),
+    )
+    connection.commit()
+
+
+def research_gaps_for(
+    connection: sqlite3.Connection, status: str | None = None
+) -> list[sqlite3.Row]:
+    query = """
+        SELECT rg.*, p.name AS partner
+        FROM research_gaps AS rg JOIN partners AS p ON p.id = rg.partner_id
+    """
+    parameters: list[str] = []
+    if status:
+        ensure_choice(status, GAP_STATUSES, "gap status")
+        query += " WHERE rg.status = ?"
+        parameters.append(status)
+    return connection.execute(
+        query + " ORDER BY p.name COLLATE NOCASE, rg.product_area COLLATE NOCASE",
+        parameters,
+    ).fetchall()
 
 
 def partner_status(connection: sqlite3.Connection, partner: str) -> dict[str, object]:
@@ -530,6 +607,38 @@ def run_export(connection: sqlite3.Connection, args: argparse.Namespace) -> None
         print(export_markdown(rows, args.partner))
 
 
+def run_gap_add(connection: sqlite3.Connection, args: argparse.Namespace) -> None:
+    values = {
+        key: value
+        for key, value in vars(args).items()
+        if key not in {"db", "command", "func", "partner"}
+    }
+    values["partner_id"] = str(partner_id(connection, args.partner))
+    print(f"added research gap {add_research_gap(connection, values)}")
+
+
+def run_gap_update(connection: sqlite3.Connection, args: argparse.Namespace) -> None:
+    changes = {
+        key: value
+        for key, value in vars(args).items()
+        if key not in {"db", "command", "func", "id"}
+    }
+    update_research_gap(connection, args.id, changes)
+    print(f"updated research gap {args.id}")
+
+
+def run_gaps(connection: sqlite3.Connection, args: argparse.Namespace) -> None:
+    rows = research_gaps_for(connection, args.status)
+    if args.json:
+        print(json.dumps([dict(row) for row in rows], indent=2))
+        return
+    for row in rows:
+        print(
+            f"{row['id']}\t{row['partner']}\t{row['status']}\t"
+            f"{row['product_area']}\t{row['next_check_date'] or ''}"
+        )
+
+
 def run_review(connection: sqlite3.Connection, args: argparse.Namespace) -> None:
     values = {
         key: value
@@ -632,6 +741,44 @@ def parser() -> argparse.ArgumentParser:
     export.add_argument("--partner", required=True, choices=PARTNERS)
     export.add_argument("--format", choices=("markdown", "json"), default="markdown")
     export.set_defaults(func=run_export)
+
+    gaps = commands.add_parser("gaps", help="list research gaps")
+    gaps.add_argument("--status", choices=GAP_STATUSES)
+    gaps.add_argument("--json", action="store_true")
+    gaps.set_defaults(func=run_gaps)
+
+    gap_add = commands.add_parser("gap-add", help="add a research gap")
+    gap_add.add_argument("--partner", required=True, choices=PARTNERS)
+    gap_add.add_argument("--product-area", required=True)
+    gap_add.add_argument("--statement", dest="gap_statement", required=True)
+    gap_add.add_argument("--status", required=True, choices=GAP_STATUSES)
+    gap_add.add_argument("--search-scope", default="")
+    gap_add.add_argument("--last-checked", dest="last_checked_date", type=valid_date, default=today())
+    gap_add.add_argument("--next-check", dest="next_check_date", type=valid_date)
+    gap_add.add_argument("--next-action", default="")
+    gap_add.add_argument("--resolution-item", dest="resolution_item_id", type=int)
+    gap_add.set_defaults(func=run_gap_add)
+
+    gap_update = commands.add_parser("gap-update", help="update a research gap")
+    gap_update.add_argument("id", type=int)
+    for flag, destination, kind in (
+        ("--product-area", "product_area", None),
+        ("--statement", "gap_statement", None),
+        ("--status", "status", None),
+        ("--search-scope", "search_scope", None),
+        ("--last-checked", "last_checked_date", valid_date),
+        ("--next-check", "next_check_date", valid_date),
+        ("--next-action", "next_action", None),
+        ("--resolution-item", "resolution_item_id", int),
+    ):
+        gap_update.add_argument(
+            flag,
+            dest=destination,
+            type=kind,
+            choices=GAP_STATUSES if destination == "status" else None,
+            default=argparse.SUPPRESS,
+        )
+    gap_update.set_defaults(func=run_gap_update)
 
     review = commands.add_parser("review", help="save a partner review summary")
     review.add_argument("--partner", required=True, choices=PARTNERS)

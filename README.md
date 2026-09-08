@@ -75,6 +75,13 @@ List the active inventory for one partner:
 uv run partner-tracker --db private/partner-tracking.db list --partner Databricks --status active
 ```
 
+List open research gaps, or record one for a future review:
+
+```bash
+uv run partner-tracker --db private/partner-tracking.db gaps --status open
+uv run partner-tracker --db private/partner-tracking.db gap-add --partner AWS --product-area "Amazon OpenSearch" --statement "No direct implementation found." --status open --last-checked 2026-09-08 --next-check 2026-12-08 --next-action "Recheck official samples."
+```
+
 Export an active inventory as Markdown or JSON:
 
 ```bash
@@ -114,7 +121,7 @@ uv run build-site --data site/public-data.json --output _site
 uv run validate-site _site
 ```
 
-Open `_site/index.html` directly or serve `_site` with a local static-file server. The generated site contains a dashboard plus filterable Integration assets and Articles catalogues. It publishes only active direct records, never exposes local paths or internal review actions, and does not need SQLite after generation. Public links must use HTTPS, and only an explicit allowlist of harmless query parameters is accepted.
+Open `_site/index.html` directly or serve `_site` with a local static-file server. The generated site contains a dashboard, filterable Integration assets and Articles catalogues, and a Current research gaps page. It publishes only active direct records and open research gaps, never exposes local paths or internal review actions, and does not need SQLite after generation. Public links must use HTTPS, and only an explicit allowlist of harmless query parameters is accepted.
 
 `validate-site` checks that every internal reference resolves inside the site root. It reports how many external links the pages contain, and it does not request them.
 

@@ -62,6 +62,18 @@ PUBLIC_DATA_FIELDS = frozenset(
         "reviews",
         "data_through",
         "partners",
+        "research_gaps",
+    }
+)
+PUBLIC_GAP_FIELDS = frozenset(
+    {
+        "partner",
+        "product_area",
+        "gap_statement",
+        "status",
+        "last_checked_date",
+        "next_check_date",
+        "next_action",
     }
 )
 
@@ -188,6 +200,17 @@ def partner_metrics(connection: sqlite3.Connection) -> dict[str, dict[str, objec
     }
 
 
+def public_research_gaps(connection: sqlite3.Connection) -> list[dict[str, object]]:
+    rows = connection.execute(
+        """SELECT p.name AS partner, rg.product_area, rg.gap_statement, rg.status,
+                  rg.last_checked_date, rg.next_check_date, rg.next_action
+           FROM research_gaps AS rg JOIN partners AS p ON p.id = rg.partner_id
+           WHERE rg.status = 'open'
+           ORDER BY p.name COLLATE NOCASE, rg.product_area COLLATE NOCASE"""
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
 def site_data(connection: sqlite3.Connection) -> dict[str, object]:
     invalid_publishers = connection.execute(
         f"""
@@ -208,6 +231,7 @@ def site_data(connection: sqlite3.Connection) -> dict[str, object]:
 
     integration_assets = public_rows(connection, ("local_sample", "repository"))
     articles = public_rows(connection, ("public_reference",))
+    research_gaps = public_research_gaps(connection)
     missing_article_urls = sum(1 for article in articles if not article["canonical_url"])
     if missing_article_urls:
         raise ValueError(
@@ -232,6 +256,7 @@ def site_data(connection: sqlite3.Connection) -> dict[str, object]:
         "reviews": reviews,
         "data_through": data_through,
         "partners": sorted({row["partner"] for row in integration_assets + articles}),
+        "research_gaps": research_gaps,
     }
 
 
@@ -254,7 +279,7 @@ def load_public_data(path: Path) -> dict[str, object]:
         raise ValueError(f"invalid public data JSON: {path}") from error
     if not isinstance(data, dict) or set(data) != PUBLIC_DATA_FIELDS:
         raise ValueError("public data has an unexpected schema")
-    for key in ("integration_assets", "articles", "reviews", "partners"):
+    for key in ("integration_assets", "articles", "reviews", "partners", "research_gaps"):
         if not isinstance(data[key], list):
             raise ValueError(f"public data field {key} must be a list")
     for key in ("publisher_metrics", "partner_metrics"):
@@ -270,6 +295,9 @@ def load_public_data(path: Path) -> dict[str, object]:
             "last_completed_review_date",
         }:
             raise ValueError("public review has an unexpected schema")
+    for gap in data["research_gaps"]:
+        if not isinstance(gap, dict) or set(gap) != PUBLIC_GAP_FIELDS:
+            raise ValueError("public research gap has an unexpected schema")
     serialized = json.dumps(data, sort_keys=True).lower()
     if any(marker in serialized for marker in PRIVATE_DATA_MARKERS):
         raise ValueError("public data contains a private-data marker")
@@ -319,6 +347,10 @@ def render_data(
                 {"items": data["integration_assets"]},
             ),
             "articles.html": ("articles.html", {"items": data["articles"]}),
+            "research-gaps.html": (
+                "research-gaps.html",
+                {"items": data["research_gaps"]},
+            ),
         }
         for filename, (template_name, context) in pages.items():
             rendered = environment.get_template(template_name).render(

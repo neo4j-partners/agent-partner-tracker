@@ -89,6 +89,27 @@ class PartnerTrackerTests(unittest.TestCase):
         state = tracker.partner_status(self.connection, "AWS")
         self.assertEqual(state["reviews"][0]["review_identifier"], "review-1")
 
+    def test_research_gap_can_be_added_and_resolved(self):
+        gap_id = tracker.add_research_gap(
+            self.connection,
+            {
+                "partner_id": str(tracker.partner_id(self.connection, "AWS")),
+                "product_area": "Amazon OpenSearch",
+                "gap_statement": "No direct technical example found.",
+                "status": "open",
+                "search_scope": "Official and GitHub sources.",
+                "last_checked_date": "2026-09-08",
+                "next_check_date": "2026-12-08",
+                "next_action": "Recheck official samples.",
+                "resolution_item_id": None,
+            },
+        )
+        self.assertEqual(len(tracker.research_gaps_for(self.connection, "open")), 1)
+        tracker.update_research_gap(
+            self.connection, gap_id, {"status": "resolved"}
+        )
+        self.assertEqual(tracker.research_gaps_for(self.connection, "open"), [])
+
     def test_in_progress_review_can_be_finalized_with_the_same_identifier(self):
         review = {"partner": "AWS", "review_identifier": "review-1", "started_date": "2026-09-08",
                   "completed_date": None, "review_window": "2026-09-01 to 2026-09-09", "status": "in_progress",

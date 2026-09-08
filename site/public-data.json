@@ -1582,6 +1582,23 @@
       "title": "Graph-enriched detection for Databricks Genie"
     },
     {
+      "canonical_url": "https://www.databricks.com/blog/revolutionizing-insight-heavy-equipment-maintenance-genai",
+      "content_type": "public_reference",
+      "content_type_label": "Article",
+      "id": 177,
+      "last_checked_date": "2026-09-08",
+      "partner": "Databricks",
+      "partner_products": "Unity Catalog, Mosaic AI Model Serving",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "partner",
+      "publisher_group_label": "Partner",
+      "publisher_name": "Databricks",
+      "summary": "Neo4j role: Knowledge graph and Cypher query target. Partner role: Unity Catalog and Mosaic AI provide governed ingestion and model serving. Joint result: maintenance insight generation from connected equipment data.",
+      "title": "Heavy-equipment maintenance GenAI with Neo4j"
+    },
+    {
       "canonical_url": "https://www.databricks.com/blog/building-improving-and-deploying-knowledge-graph-rag-systems-databricks",
       "content_type": "public_reference",
       "content_type_label": "Article",
@@ -1684,6 +1701,40 @@
       "title": "IBM Instana Neo4j monitoring"
     },
     {
+      "canonical_url": "https://www.ibm.com/docs/en/cloud-paks/cp-data/5.1.x?topic=new-match-360",
+      "content_type": "public_reference",
+      "content_type_label": "Article",
+      "id": 188,
+      "last_checked_date": "2026-09-08",
+      "partner": "IBM",
+      "partner_products": "IBM Cloud Pak for Data, IBM Match 360",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "partner",
+      "publisher_group_label": "Partner",
+      "publisher_name": "IBM",
+      "summary": "Neo4j role: Graph storage for master-data entities and relationships. Partner role: Cloud Pak for Data Match 360 supplies the MDM service. Joint result: scalable master-data graph and search.",
+      "title": "IBM Match 360 uses Neo4j graph database"
+    },
+    {
+      "canonical_url": "https://www.ibm.com/docs/en/software-hub/5.2.x?topic=administering-migrating-neo4j",
+      "content_type": "public_reference",
+      "content_type_label": "Article",
+      "id": 187,
+      "last_checked_date": "2026-09-08",
+      "partner": "IBM",
+      "partner_products": "IBM Software Hub, Cloud Pak for Data Match 360",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "partner",
+      "publisher_group_label": "Partner",
+      "publisher_name": "IBM",
+      "summary": "Neo4j role: Graph persistence. Partner role: IBM Software Hub and Cloud Pak Match 360 provide governed master-data management. Joint result: migration of the master-data graph to Neo4j.",
+      "title": "Migrate IBM Match 360 to Neo4j"
+    },
+    {
       "canonical_url": "https://neo4j.com/docs/operations-manual/current/docker/introduction",
       "content_type": "public_reference",
       "content_type_label": "Article",
@@ -1754,6 +1805,40 @@
   ],
   "data_through": "2026-09-08",
   "integration_assets": [
+    {
+      "canonical_url": "https://github.com/neo-technology/aura-lambda",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 168,
+      "last_checked_date": "2026-09-08",
+      "partner": "AWS",
+      "partner_products": "AWS Lambda, Amazon S3, AWS CloudFormation",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo Technology",
+      "summary": "Neo4j role: Aura graph database. Partner role: Lambda, S3, and CloudFormation provide the ingestion runtime and deployment. Joint result: serverless graph data ingestion.",
+      "title": "Aura Lambda"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-examples/aws-lambda-java-neo4j",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 167,
+      "last_checked_date": "2026-09-08",
+      "partner": "AWS",
+      "partner_products": "AWS Lambda, AWS CDK, Amazon CloudWatch",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Examples",
+      "summary": "Neo4j role: Graph query endpoint. Partner role: AWS Lambda, CDK, and CloudWatch provide serverless execution and operations. Joint result: a deployable serverless Neo4j API.",
+      "title": "AWS Lambda Java Neo4j"
+    },
     {
       "canonical_url": "https://github.com/neo4j-partners/neo4j-business-resilience",
       "content_type": "repository",
@@ -1838,6 +1923,40 @@
       "publisher_name": "Neo4j Partners",
       "summary": "Workshop build showing the full path from raw documents to a deployed, grounded Strands/Bedrock agent backed by a Neo4j graph, framed around a hallucinating hotel-booking agent.",
       "title": "Grounded AI Agents with Neo4j and AWS: Raw Documents to Deployed Agent (Workshop)"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-partners/hands-on-lab-neo4j-and-bedrock",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 166,
+      "last_checked_date": "2026-09-08",
+      "partner": "AWS",
+      "partner_products": "Amazon Bedrock",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Partners",
+      "summary": "Neo4j role: GraphRAG and agent grounding. Partner role: Amazon Bedrock supplies foundation-model services. Joint result: a hands-on generative-AI agent lab.",
+      "title": "Hands-on Lab: Neo4j and Bedrock"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-contrib/mcp-neo4j/blob/main/README-Cloud.md",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 169,
+      "last_checked_date": "2026-09-08",
+      "partner": "AWS",
+      "partner_products": "Amazon ECS Fargate, Amazon ECR, AWS IAM, AWS Secrets Manager, Amazon CloudWatch",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Contrib",
+      "summary": "Neo4j role: Cypher MCP server. Partner role: ECS Fargate, ECR, IAM, Secrets Manager, ALB, and CloudWatch provide a managed runtime. Joint result: a scalable production graph MCP service.",
+      "title": "MCP Neo4j ECS Fargate deployment guide"
     },
     {
       "canonical_url": "https://github.com/neo4j-partners/neo4j-aws-graphrag-workshop",
@@ -2146,6 +2265,23 @@
       "title": "neo4j/neo4j-graphrag-python"
     },
     {
+      "canonical_url": "https://github.com/awslabs/amazon-neptune-tools/tree/master/neo4j-to-neptune",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 170,
+      "last_checked_date": "2026-09-08",
+      "partner": "AWS",
+      "partner_products": "Amazon Neptune, AWS Glue",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "partner",
+      "publisher_group_label": "Partner",
+      "publisher_name": "AWS Labs",
+      "summary": "Neo4j role: Source graph for migration. Partner role: Amazon Neptune and Glue provide the target and migration tooling. Joint result: reusable Neo4j migration utility.",
+      "title": "Neptune tools: neo4j-to-neptune"
+    },
+    {
       "canonical_url": "https://github.com/neo4j-labs/neo4j-agent-integrations/tree/main/aws-agentcore/samples/2-gateway-external-mcp",
       "content_type": "repository",
       "content_type_label": "Repository",
@@ -2263,6 +2399,125 @@
       "publisher_name": "Neo4j Labs",
       "summary": "Neo4j Python driver powers typed FastMCP graph-query tools; Amazon Bedrock AgentCore Runtime, S3, Secrets Manager, and CDK deploy the service; together they provide an extensible custom MCP implementation for AWS agents.",
       "title": "Typed Neo4j Python MCP runtime on AgentCore"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-partners/graph-on-databricks/tree/main/agentic-commerce",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 178,
+      "last_checked_date": "2026-09-08",
+      "partner": "Databricks",
+      "partner_products": "Databricks Apps, Mosaic AI Model Serving",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Partners",
+      "summary": "Neo4j role: GraphRAG and memory-backed retail assistant. Partner role: Databricks Apps and Mosaic AI Model Serving provide the client and deployment pipeline. Joint result: agentic retail assistant.",
+      "title": "Agentic Commerce on Databricks"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-contrib/neo4j-dwh-connector",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 184,
+      "last_checked_date": "2026-09-08",
+      "partner": "Databricks",
+      "partner_products": "Databricks Jobs, Apache Spark",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Contrib",
+      "summary": "Neo4j role: Graph import target. Partner role: Databricks jobs and Spark execution provide the pipeline runtime. Joint result: importable notebook and job configuration for graph loading.",
+      "title": "Data Warehouse Connector Databricks example"
+    },
+    {
+      "canonical_url": "https://github.com/databricks-industry-solutions/graphrag-demo",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 176,
+      "last_checked_date": "2026-09-08",
+      "partner": "Databricks",
+      "partner_products": "Unity Catalog, Delta Lake, Databricks Model Serving",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "partner",
+      "publisher_group_label": "Partner",
+      "publisher_name": "Databricks Industry Solutions",
+      "summary": "Neo4j role: Knowledge graph and GraphRAG retrieval. Partner role: Unity Catalog, Delta, serving, and app registration provide the Lakehouse AI platform. Joint result: a deployed text-to-Cypher GraphRAG chatbot.",
+      "title": "Databricks GraphRAG demo"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-partners/dbxcarta",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 182,
+      "last_checked_date": "2026-09-08",
+      "partner": "Databricks",
+      "partner_products": "Unity Catalog, Delta Lake, Databricks Genie",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Partners",
+      "summary": "Neo4j role: Semantic graph over Unity Catalog metadata. Partner role: Unity Catalog, Delta materialization, and Genie provide governed data and AI access. Joint result: semantic context for analytics.",
+      "title": "dbxcarta semantic layer"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-labs/neo4j-agent-integrations/tree/main/databricks-agent-bricks",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 179,
+      "last_checked_date": "2026-09-08",
+      "partner": "Databricks",
+      "partner_products": "Unity AI Gateway, Unity Catalog Functions, Databricks Apps",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Labs",
+      "summary": "Neo4j role: Graph and MCP tools. Partner role: Unity AI Gateway, UC Functions, and Databricks Apps host agent-tool patterns. Joint result: four runnable graph-agent integrations.",
+      "title": "Neo4j Agent Bricks integrations"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-partners/databricks-neo4j-lab",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 181,
+      "last_checked_date": "2026-09-08",
+      "partner": "Databricks",
+      "partner_products": "Databricks Lakehouse, Databricks Genie",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Partners",
+      "summary": "Neo4j role: Graph and GraphRAG over operational data. Partner role: Databricks telemetry Lakehouse and Genie provide data and natural-language analytics. Joint result: aviation intelligence workshop.",
+      "title": "Neo4j and Databricks hands-on lab"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-partners/databricks-neo4j-supply-chain",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 180,
+      "last_checked_date": "2026-09-08",
+      "partner": "Databricks",
+      "partner_products": "Delta Lake, Databricks Apps",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Partners",
+      "summary": "Neo4j role: Supply-chain graph and MCP route. Partner role: Gold Delta and Databricks Apps provide the Lakehouse pipeline and application. Joint result: synchronized supply-chain intelligence.",
+      "title": "Neo4j and Databricks supply-chain"
     },
     {
       "canonical_url": "https://github.com/neo4j-partners/databricks-neo4j-workshop",
@@ -2418,6 +2673,40 @@
       "title": "Official Neo4j MCP server on Databricks Apps"
     },
     {
+      "canonical_url": "https://github.com/neo4j-product-examples/ds-spark-examples/tree/main/spark-databricks-delta-lake",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 183,
+      "last_checked_date": "2026-09-08",
+      "partner": "Databricks",
+      "partner_products": "Databricks, Delta Lake",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Product Examples",
+      "summary": "Neo4j role: Graph ETL target. Partner role: Databricks Delta Lake stages source data. Joint result: staged Delta-to-Neo4j loading.",
+      "title": "Spark Delta Lake ETL demo"
+    },
+    {
+      "canonical_url": "https://github.com/bitnami/charts/tree/main/bitnami/neo4j",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 190,
+      "last_checked_date": "2026-09-08",
+      "partner": "IBM",
+      "partner_products": "Red Hat OpenShift",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "community",
+      "publisher_group_label": "Community",
+      "publisher_name": "Bitnami",
+      "summary": "Neo4j role: Helm-deployed graph database. Partner role: Red Hat OpenShift provides security context and persistent Kubernetes runtime. Joint result: compatible graph deployment.",
+      "title": "Bitnami Neo4j Helm chart OpenShift compatibility"
+    },
+    {
       "canonical_url": "https://github.com/neo4j-labs/neo4j-agent-integrations/tree/main/ibm-watsonx",
       "content_type": "repository",
       "content_type_label": "Repository",
@@ -2450,20 +2739,37 @@
       "publisher_name": "Neo4j Labs",
       "summary": "Runnable code-based LangGraph agent imported into watsonx Orchestrate. It uses Neo4j Agent Memory Service for cross-session memory and the Neo4j companies graph for LLM-routed schema and Cypher tools, then persists extracted memories. The setup script creates connections, imports the agent package, and attaches its credentials.",
       "title": "LangGraph memory and graph agent for watsonx Orchestrate"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-partners/neo4j-kubernetes-operator/tree/main/examples/clusters",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 189,
+      "last_checked_date": "2026-09-08",
+      "partner": "IBM",
+      "partner_products": "Red Hat OpenShift",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Partners",
+      "summary": "Neo4j role: Enterprise graph cluster. Partner role: Red Hat OpenShift supplies the routing and Kubernetes runtime. Joint result: deployable Neo4j exposure through an OpenShift Route.",
+      "title": "Neo4j Kubernetes Operator OpenShift Route example"
     }
   ],
   "partner_metrics": {
     "AWS": {
       "article_count": 92,
-      "integration_count": 30
+      "integration_count": 35
     },
     "Databricks": {
-      "article_count": 6,
-      "integration_count": 9
+      "article_count": 7,
+      "integration_count": 17
     },
     "IBM": {
-      "article_count": 5,
-      "integration_count": 2
+      "article_count": 7,
+      "integration_count": 4
     }
   },
   "partners": [
@@ -2474,23 +2780,61 @@
   "publisher_metrics": {
     "community": {
       "article_count": 17,
-      "integration_count": 1,
+      "integration_count": 2,
       "label": "Community",
-      "total": 18
+      "total": 19
     },
     "neo4j": {
       "article_count": 55,
-      "integration_count": 40,
+      "integration_count": 52,
       "label": "Neo4j",
-      "total": 95
+      "total": 107
     },
     "partner": {
-      "article_count": 31,
-      "integration_count": 0,
+      "article_count": 34,
+      "integration_count": 2,
       "label": "Partner",
-      "total": 31
+      "total": 36
     }
   },
+  "research_gaps": [
+    {
+      "gap_statement": "No direct, implementation-backed Neo4j and Amazon OpenSearch integration example was verified.",
+      "last_checked_date": "2026-09-08",
+      "next_action": "Recheck AWS architecture, OpenSearch, and Neo4j sample repositories.",
+      "next_check_date": "2026-12-08",
+      "partner": "AWS",
+      "product_area": "Amazon OpenSearch",
+      "status": "open"
+    },
+    {
+      "gap_statement": "No direct, implementation-backed example using both Databricks Vector Search and Neo4j was verified.",
+      "last_checked_date": "2026-09-08",
+      "next_action": "Recheck Databricks solution accelerators, Vector Search docs, and Neo4j partner repositories.",
+      "next_check_date": "2026-12-08",
+      "partner": "Databricks",
+      "product_area": "Databricks Vector Search",
+      "status": "open"
+    },
+    {
+      "gap_statement": "No standalone technical Neo4j integration for IBM watsonx.data was verified.",
+      "last_checked_date": "2026-09-08",
+      "next_action": "Recheck watsonx.data documentation, IBM solution repositories, and Neo4j partner samples.",
+      "next_check_date": "2026-12-08",
+      "partner": "IBM",
+      "product_area": "watsonx.data",
+      "status": "open"
+    },
+    {
+      "gap_statement": "No verified technical Neo4j integration for IBM watsonx.governance was found.",
+      "last_checked_date": "2026-09-08",
+      "next_action": "Recheck watsonx.governance documentation, IBM solution repositories, and Neo4j partner samples.",
+      "next_check_date": "2026-12-08",
+      "partner": "IBM",
+      "product_area": "watsonx.governance",
+      "status": "open"
+    }
+  ],
   "reviews": [
     {
       "last_completed_review_date": "2026-09-08",
