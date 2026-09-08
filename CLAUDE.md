@@ -27,6 +27,12 @@ State the Neo4j role, then the partner role, then the joint result. This format 
 
 The site build refuses to publish an active direct record that has a URL and no publisher classification. Classify the item when you add it.
 
+## Use the public GitHub source for every local project
+
+A local directory is discovery evidence, not the source of record. For every local integration project, resolve its `origin` remote and store the canonical HTTPS GitHub URL in `canonical_url`; use that same public URL as `evidence_url` unless a more specific public technical page is stronger. Keep `local_path` only as a supplemental checkout reference.
+
+Do not create or retain an active direct item that has only a local path when its GitHub source is available. Classify the public repository by its actual owner: repositories published by Neo4j or Neo4j Partners use the `neo4j` group, while repositories or articles published by AWS, Databricks, IBM, or Red Hat use the `partner` group. Never infer `partner` merely from a project name or a local directory.
+
 ## Use parallel agents safely
 
 Use parallel agents for independent discovery and verification work. Keep database writes with one coordinator. This rule prevents conflicting updates.

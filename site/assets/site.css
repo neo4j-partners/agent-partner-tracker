@@ -244,6 +244,39 @@ section {
   margin-top: auto;
 }
 
+.partner-stats {
+  display: flex;
+  gap: 1.75rem;
+  margin-top: auto;
+}
+
+.partner-stats a {
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+  margin-top: 0;
+  text-decoration: none;
+}
+
+.partner-stats a:hover .stat-value {
+  color: var(--accent);
+}
+
+.stat-value {
+  color: var(--ink);
+  font-size: 2.4rem;
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 650;
+  margin-top: 0.4rem;
+}
+
 .review-panel {
   align-items: center;
   display: grid;

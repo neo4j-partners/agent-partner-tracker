@@ -22,10 +22,15 @@
         {% set metric = partner_metrics[partner] %}
         <article class="metric-card partner-card">
           <p class="metric-label">{{ partner }}</p>
-          <p class="metric-value">{{ metric.total }}</p>
-          <div class="card-links">
-            <a href="integration-assets.html?partner={{ partner }}">{{ metric.integration_count }} integration assets</a>
-            <a href="articles.html?partner={{ partner }}">{{ metric.article_count }} articles</a>
+          <div class="partner-stats">
+            <a href="integration-assets.html?partner={{ partner }}">
+              <span class="stat-value">{{ metric.integration_count }}</span>
+              <span class="stat-label">Integration assets</span>
+            </a>
+            <a href="articles.html?partner={{ partner }}">
+              <span class="stat-value">{{ metric.article_count }}</span>
+              <span class="stat-label">Articles</span>
+            </a>
           </div>
         </article>
       {% endfor %}

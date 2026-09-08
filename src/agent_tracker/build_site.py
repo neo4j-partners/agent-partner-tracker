@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import shutil
 import sqlite3
+import sys
 import tempfile
 from contextlib import closing
 from pathlib import Path
@@ -136,7 +137,6 @@ def partner_metrics(connection: sqlite3.Connection) -> dict[str, dict[str, objec
         partner: {
             "integration_count": entry["integration_count"],
             "article_count": entry["article_count"],
-            "total": entry["integration_count"] + entry["article_count"],
         }
         for partner, entry in counts.items()
     }
@@ -191,7 +191,7 @@ def site_data(connection: sqlite3.Connection) -> dict[str, object]:
 
 def render_site(
     database: Path, output: Path, templates: Path, assets: Path
-) -> None:
+) -> dict[str, object]:
     if not templates.is_dir():
         raise ValueError(f"template directory does not exist: {templates}")
     if not assets.is_dir():
@@ -233,6 +233,28 @@ def render_site(
         if output.exists():
             shutil.rmtree(output)
         staging.rename(output)
+    return data
+
+
+def build_statistics(data: dict[str, object]) -> str:
+    """Format the public content totals included in a generated site."""
+    integration_count = len(data["integration_assets"])
+    article_count = len(data["articles"])
+    partner_count = len(data["partners"])
+    data_through = data["data_through"] or "not available"
+
+    def count(value: int, label: str) -> str:
+        suffix = "" if value == 1 else "s"
+        return f"{value} {label}{suffix}"
+
+    return ", ".join(
+        (
+            count(integration_count, "integration asset"),
+            count(article_count, "article"),
+            count(partner_count, "partner"),
+            f"data through {data_through}",
+        )
+    )
 
 
 def parser() -> argparse.ArgumentParser:
@@ -246,11 +268,14 @@ def parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     args = parser().parse_args()
+    print(f"status: building static site from {args.db}")
     try:
-        render_site(args.db, args.output, args.templates, args.assets)
+        data = render_site(args.db, args.output, args.templates, args.assets)
     except (OSError, sqlite3.Error, ValueError) as error:
-        raise SystemExit(f"error: {error}") from error
-    print(f"generated {args.output}")
+        print(f"status: failed: {error}", file=sys.stderr)
+        return 1
+    print(f"statistics: {build_statistics(data)}")
+    print(f"status: generated {args.output}")
     return 0
 
 

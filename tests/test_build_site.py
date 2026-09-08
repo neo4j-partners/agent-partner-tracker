@@ -132,6 +132,15 @@ class StaticSiteTests(unittest.TestCase):
         database_before = hashlib.sha256(self.database.read_bytes()).hexdigest()
         first = self.generate()
         self.assertEqual(first.returncode, 0, first.stderr)
+        self.assertIn(
+            f"status: building static site from {self.database}", first.stdout
+        )
+        self.assertIn(
+            "statistics: 2 integration assets, 1 article, 1 partner, "
+            "data through 2026-09-08",
+            first.stdout,
+        )
+        self.assertIn("status: generated", first.stdout)
         first_digest = self.artifact_digest()
 
         output = self.root / "_site"
@@ -157,9 +166,10 @@ class StaticSiteTests(unittest.TestCase):
         )
         articles = (output / "articles.html").read_text(encoding="utf-8")
         self.assertIn('<p class="metric-label">AWS</p>', index)
-        self.assertIn('<p class="metric-value">3</p>', index)
-        self.assertIn('2 integration assets', index)
-        self.assertIn('1 articles', index)
+        self.assertIn('<span class="stat-value">2</span>', index)
+        self.assertIn('<span class="stat-value">1</span>', index)
+        self.assertIn('<span class="stat-label">Integration assets</span>', index)
+        self.assertIn('<span class="stat-label">Articles</span>', index)
         self.assertNotIn("private/sample-path", integrations)
         self.assertNotIn("<script>alert('escaped')</script>", articles)
         self.assertIn("&lt;script&gt;alert", articles)
@@ -190,6 +200,7 @@ class StaticSiteTests(unittest.TestCase):
         result = self.generate()
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("need publisher classification", result.stderr)
+        self.assertIn("status: failed:", result.stderr)
 
 
 if __name__ == "__main__":

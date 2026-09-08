@@ -31,6 +31,16 @@ dependencies.
 uv sync
 ```
 
+Generate the static site from the SQLite database:
+
+```bash
+uv run build-site --db partner-tracking.db --output _site
+uv run validate-site _site
+```
+
+`build-site` reads `partner-tracking.db` and regenerates `_site`; it does not
+modify the database.
+
 Check the database and run the tests:
 
 ```bash
@@ -133,6 +143,7 @@ Both scripts write their report to `DISCOVERY_OUTPUT_DIR`, which defaults to `re
 - **Archived:** Historical content that remains searchable but is not current guidance.
 - **Review:** A short record of a partner check, its sources, result, and next action.
 - **Canonical URL:** The normalized public URL used to prevent duplicates.
+- **Local checkout:** A supplemental developer reference only. Every published local project must also record its canonical public GitHub URL as the source of record.
 - **Publisher name:** The reviewed public name of the site, account, or repository organization that published an item.
 - **Publisher group:** Neo4j, partner, community, not applicable, or temporarily unclassified.
 - **Markdown archive:** A retired project document stored in SQLite with its checksum and original text.
