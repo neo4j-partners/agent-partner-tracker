@@ -2416,6 +2416,40 @@
       "publisher_name": "Neo4j Labs",
       "summary": "The official Neo4j MCP server exposes read-only general graph tools; Databricks Apps, Secret scopes, Asset Bundles, and Agent Bricks deploy and consume it; together they provide a runnable Workspace-authenticated Neo4j MCP service.",
       "title": "Official Neo4j MCP server on Databricks Apps"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-labs/neo4j-agent-integrations/tree/main/ibm-watsonx",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 164,
+      "last_checked_date": "2026-09-08",
+      "partner": "IBM",
+      "partner_products": "watsonx Orchestrate; Orchestrate ADK; MCP; mcp-neo4j-cypher; Neo4j Aura or self-managed Neo4j",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Labs",
+      "summary": "Runnable watsonx Orchestrate native-agent integration: the local stdio mcp-neo4j-cypher toolkit supplies schema and read-only Cypher tools, alongside a curated Python investments tool. Make targets create connections, register tools, and verify the environment; agent creation remains a documented console step because of an ADK 2.12.0 limitation.",
+      "title": "IBM watsonx Orchestrate native Neo4j MCP agent"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-labs/neo4j-agent-integrations/tree/main/ibm-watsonx/memory-agent",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 165,
+      "last_checked_date": "2026-09-08",
+      "partner": "IBM",
+      "partner_products": "watsonx Orchestrate; Orchestrate ADK; LangGraph; Neo4j Agent Memory Service; Neo4j companies graph; OpenAI",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Labs",
+      "summary": "Runnable code-based LangGraph agent imported into watsonx Orchestrate. It uses Neo4j Agent Memory Service for cross-session memory and the Neo4j companies graph for LLM-routed schema and Cypher tools, then persists extracted memories. The setup script creates connections, imports the agent package, and attaches its credentials.",
+      "title": "LangGraph memory and graph agent for watsonx Orchestrate"
     }
   ],
   "partner_metrics": {
@@ -2429,7 +2463,7 @@
     },
     "IBM": {
       "article_count": 5,
-      "integration_count": 0
+      "integration_count": 2
     }
   },
   "partners": [
@@ -2446,9 +2480,9 @@
     },
     "neo4j": {
       "article_count": 55,
-      "integration_count": 38,
+      "integration_count": 40,
       "label": "Neo4j",
-      "total": 93
+      "total": 95
     },
     "partner": {
       "article_count": 31,
