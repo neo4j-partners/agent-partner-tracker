@@ -81,6 +81,11 @@ column by editing that function and applying a matching `ALTER TABLE` to
 
 ## Static website
 
+The published site is live at
+<https://upgraded-fishstick-3811lj9.pages.github.io/>. Access is limited to
+`neo4j-partners` members with read access to this repository, so the link asks
+for GitHub authentication before it serves the site.
+
 Generate the partner-neutral GitHub Pages artifact:
 
 ```bash
