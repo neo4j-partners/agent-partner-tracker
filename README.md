@@ -124,7 +124,7 @@ Both scripts write their report to `DISCOVERY_OUTPUT_DIR`, which defaults to `re
 ## Terms
 
 - **Partner:** AWS, Databricks, or IBM. Each partner has its own inventory and review state.
-- **Content item:** A local sample, repository, or public reference stored in the catalog.
+- **Content item:** A local sample, repository, or public reference stored in the catalog. A single repository can hold more than one distinct sample; track each nested sample as its own content item rather than logging the whole repository as one item. `neo4j-partners/graph-enrichment` is a known example of a repository with multiple samples inside it.
 - **Direct:** Content that demonstrates a real Neo4j integration with the selected partner.
 - **Supporting:** Content that helps build or understand an integration.
 - **Active:** Current content that appears in the default inventory and export.

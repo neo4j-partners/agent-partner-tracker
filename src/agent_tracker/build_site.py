@@ -111,6 +111,37 @@ def publisher_metrics(connection: sqlite3.Connection) -> dict[str, dict[str, obj
     }
 
 
+def partner_metrics(connection: sqlite3.Connection) -> dict[str, dict[str, object]]:
+    """Count integration assets and articles for each partner."""
+    rows = connection.execute(
+        f"""
+        SELECT p.name AS partner, ci.content_type, COUNT(*) AS total
+        FROM content_items AS ci
+        JOIN partners AS p ON p.id = ci.partner_id
+        WHERE {PUBLIC_WHERE}
+          AND ci.content_type IN ('local_sample', 'repository', 'public_reference')
+        GROUP BY p.name, ci.content_type
+        """
+    ).fetchall()
+    counts: dict[str, dict[str, int]] = {}
+    for row in rows:
+        entry = counts.setdefault(
+            row["partner"], {"integration_count": 0, "article_count": 0}
+        )
+        if row["content_type"] == "public_reference":
+            entry["article_count"] += row["total"]
+        else:
+            entry["integration_count"] += row["total"]
+    return {
+        partner: {
+            "integration_count": entry["integration_count"],
+            "article_count": entry["article_count"],
+            "total": entry["integration_count"] + entry["article_count"],
+        }
+        for partner, entry in counts.items()
+    }
+
+
 def site_data(connection: sqlite3.Connection) -> dict[str, object]:
     invalid_publishers = connection.execute(
         f"""
@@ -151,6 +182,7 @@ def site_data(connection: sqlite3.Connection) -> dict[str, object]:
         "integration_assets": integration_assets,
         "articles": articles,
         "publisher_metrics": publisher_metrics(connection),
+        "partner_metrics": partner_metrics(connection),
         "reviews": reviews,
         "data_through": data_through,
         "partners": sorted({row["partner"] for row in integration_assets + articles}),

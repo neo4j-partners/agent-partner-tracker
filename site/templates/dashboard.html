@@ -17,19 +17,18 @@
         <h2 id="catalogue-heading">Current inventory</h2>
       </div>
     </div>
-    <div class="metric-grid metric-grid-primary">
-      <article class="metric-card">
-        <p class="metric-label">Integration assets</p>
-        <p class="metric-value">{{ integration_assets|length }}</p>
-        <p>Local samples and public repositories.</p>
-        <a href="integration-assets.html">View integrations <span aria-hidden="true">→</span></a>
-      </article>
-      <article class="metric-card">
-        <p class="metric-label">Active articles</p>
-        <p class="metric-value">{{ articles|length }}</p>
-        <p>Published references across all partners.</p>
-        <a href="articles.html">View articles <span aria-hidden="true">→</span></a>
-      </article>
+    <div class="metric-grid">
+      {% for partner in partners %}
+        {% set metric = partner_metrics[partner] %}
+        <article class="metric-card partner-card">
+          <p class="metric-label">{{ partner }}</p>
+          <p class="metric-value">{{ metric.total }}</p>
+          <div class="card-links">
+            <a href="integration-assets.html?partner={{ partner }}">{{ metric.integration_count }} integration assets</a>
+            <a href="articles.html?partner={{ partner }}">{{ metric.article_count }} articles</a>
+          </div>
+        </article>
+      {% endfor %}
     </div>
   </section>
 

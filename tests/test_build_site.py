@@ -156,8 +156,10 @@ class StaticSiteTests(unittest.TestCase):
             encoding="utf-8"
         )
         articles = (output / "articles.html").read_text(encoding="utf-8")
-        self.assertIn('<p class="metric-value">2</p>', index)
-        self.assertIn('<p class="metric-value">1</p>', index)
+        self.assertIn('<p class="metric-label">AWS</p>', index)
+        self.assertIn('<p class="metric-value">3</p>', index)
+        self.assertIn('2 integration assets', index)
+        self.assertIn('1 articles', index)
         self.assertNotIn("private/sample-path", integrations)
         self.assertNotIn("<script>alert('escaped')</script>", articles)
         self.assertIn("&lt;script&gt;alert", articles)
