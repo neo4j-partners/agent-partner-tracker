@@ -51,7 +51,7 @@ Use these tools to find recent partner content. Verify useful candidates before 
 - **Brave Web Search:** Use this to find a broad set of candidate URLs. Use a custom freshness range and partner-specific `site:` queries.
 - **Brave Goggles:** Use this to boost trusted technical domains, such as Neo4j, AWS, Databricks, IBM, Red Hat, and GitHub.
 - **Cached page retrieval:** Use this after discovery to verify a small set of candidates. Read the canonical page before adding an item.
-- **GitHub API:** Check tracked repositories for new releases, commits, issues, and README changes. This finds product changes that web search can miss.
+- **GitHub API:** Check tracked repositories for new releases, commits, issues, and README changes. This finds product changes that web search can miss. Also check whether a repository contains more than one distinct sample, such as `neo4j-partners/graph-enrichment`, and add each nested sample as its own content item.
 
 The project includes a discovery script and a repository-change script. Both scripts read `.env`, write review reports, and never change the database. A coordinator verifies and classifies every candidate before it becomes an item.
 
