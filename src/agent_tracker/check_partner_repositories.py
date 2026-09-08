@@ -81,7 +81,7 @@ def github_json(
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
     root.add_argument("--partner", required=True, choices=PARTNERS)
-    root.add_argument("--db", default="partner-tracking.db", type=Path)
+    root.add_argument("--db", default="private/partner-tracking.db", type=Path)
     root.add_argument("--env-file", default=".env", type=Path)
     root.add_argument("--output", type=Path)
     return root

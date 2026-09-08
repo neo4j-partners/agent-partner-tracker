@@ -26,7 +26,7 @@ __all__ = [
 ]
 
 DEFAULT_TIMEOUT_SECONDS = 30
-DEFAULT_OUTPUT_DIR = "reports"
+DEFAULT_OUTPUT_DIR = "private/reports"
 
 
 def load_env_file(path: Path) -> dict[str, str]:

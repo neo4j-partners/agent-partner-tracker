@@ -143,7 +143,7 @@ def deduplicate(candidates: list[dict[str, str | None]]) -> list[dict[str, str |
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
     root.add_argument("--partner", required=True, choices=PARTNERS)
-    root.add_argument("--db", default="partner-tracking.db", type=Path)
+    root.add_argument("--db", default="private/partner-tracking.db", type=Path)
     root.add_argument("--start", help="review start date in YYYY-MM-DD")
     root.add_argument("--end", help="review end date in YYYY-MM-DD")
     root.add_argument("--env-file", default=".env", type=Path)

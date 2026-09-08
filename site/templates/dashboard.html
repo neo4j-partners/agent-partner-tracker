@@ -21,16 +21,17 @@
       {% for partner in partners %}
         {% set metric = partner_metrics[partner] %}
         <article class="metric-card partner-card">
-          <p class="metric-label">{{ partner }}</p>
-          <div class="partner-stats">
-            <a href="integration-assets.html?partner={{ partner }}">
-              <span class="stat-value">{{ metric.integration_count }}</span>
-              <span class="stat-label">Integration assets</span>
-            </a>
-            <a href="articles.html?partner={{ partner }}">
-              <span class="stat-value">{{ metric.article_count }}</span>
-              <span class="stat-label">Articles</span>
-            </a>
+          <p class="metric-label">{{ partner }} Integration Assets</p>
+          <p class="metric-value">{{ metric.integration_count }}</p>
+          <div class="card-links">
+            <a href="integration-assets.html?partner={{ partner }}">View integration assets</a>
+          </div>
+        </article>
+        <article class="metric-card partner-card">
+          <p class="metric-label">{{ partner }} Articles</p>
+          <p class="metric-value">{{ metric.article_count }}</p>
+          <div class="card-links">
+            <a href="articles.html?partner={{ partner }}">View articles</a>
           </div>
         </article>
       {% endfor %}

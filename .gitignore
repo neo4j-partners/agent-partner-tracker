@@ -1,8 +1,9 @@
 .env
-reports/
+private/
+*.db
+*.sqlite
 __pycache__/
 *.py[cod]
 .venv/
 _site/
 .idea/
-*.backup-*.db

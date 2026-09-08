@@ -1,5 +1,6 @@
 import hashlib
 import importlib.util
+import json
 import subprocess
 import sys
 import tempfile
@@ -8,6 +9,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 from agent_tracker import partner_tracker as tracker
+from agent_tracker.build_site import export_public_data
 
 
 PROJECT_ROOT = Path(__file__).parents[1]
@@ -99,15 +101,15 @@ class StaticSiteTests(unittest.TestCase):
     def tearDown(self):
         self.temp.cleanup()
 
-    def generate(self):
+    def generate(self, public_data=None):
         output = self.root / "_site"
+        source = ["--data", str(public_data)] if public_data else ["--db", str(self.database)]
         return subprocess.run(
             [
                 sys.executable,
                 "-m",
                 "agent_tracker.build_site",
-                "--db",
-                str(self.database),
+                *source,
                 "--output",
                 str(output),
                 "--templates",
@@ -165,11 +167,10 @@ class StaticSiteTests(unittest.TestCase):
             encoding="utf-8"
         )
         articles = (output / "articles.html").read_text(encoding="utf-8")
-        self.assertIn('<p class="metric-label">AWS</p>', index)
-        self.assertIn('<span class="stat-value">2</span>', index)
-        self.assertIn('<span class="stat-value">1</span>', index)
-        self.assertIn('<span class="stat-label">Integration assets</span>', index)
-        self.assertIn('<span class="stat-label">Articles</span>', index)
+        self.assertIn('<p class="metric-label">AWS Integration Assets</p>', index)
+        self.assertIn('<p class="metric-label">AWS Articles</p>', index)
+        self.assertIn('<p class="metric-value">2</p>', index)
+        self.assertIn('<p class="metric-value">1</p>', index)
         self.assertNotIn("private/sample-path", integrations)
         self.assertNotIn("<script>alert('escaped')</script>", articles)
         self.assertIn("&lt;script&gt;alert", articles)
@@ -201,6 +202,41 @@ class StaticSiteTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("need publisher classification", result.stderr)
         self.assertIn("status: failed:", result.stderr)
+
+    def test_public_data_export_excludes_private_fields_and_builds(self):
+        public_data = self.root / "public-data.json"
+        export_public_data(self.database, public_data)
+        exported = public_data.read_text(encoding="utf-8")
+        self.assertNotIn("private/sample-path", exported)
+        self.assertNotIn("Public fixture.", exported)
+        self.assertNotIn("evidence_url", exported)
+        self.assertNotIn("/Users/", exported)
+
+        result = self.generate(public_data)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(f"status: building static site from {public_data}", result.stdout)
+
+    def test_public_data_rejects_sensitive_url_query(self):
+        public_data = self.root / "public-data.json"
+        export_public_data(self.database, public_data)
+        data = json.loads(public_data.read_text(encoding="utf-8"))
+        data["articles"][0]["canonical_url"] += "?token=not-public"
+        public_data.write_text(json.dumps(data), encoding="utf-8")
+
+        result = self.generate(public_data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("unsafe public URL query", result.stderr)
+
+    def test_public_data_rejects_private_data_marker(self):
+        public_data = self.root / "public-data.json"
+        export_public_data(self.database, public_data)
+        data = json.loads(public_data.read_text(encoding="utf-8"))
+        data["articles"][0]["summary"] = "Stored under /Users/private"
+        public_data.write_text(json.dumps(data), encoding="utf-8")
+
+        result = self.generate(public_data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("private-data marker", result.stderr)
 
 
 if __name__ == "__main__":

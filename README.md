@@ -2,11 +2,14 @@
 
 - Tracks how Neo4j and AWS, Databricks, or IBM work better together.
 - Explains the role of Neo4j, the role of the partner product, and the result of the integration.
-- Stores content, partner review state, and review summaries in SQLite.
+- Stores private content, partner review state, and review summaries in local SQLite.
 - Prevents duplicate public URLs and local paths for each partner.
 - Lists and exports the current active inventory.
 - Keeps watched, excluded, and archived items for future reference.
-- Preserves retired Markdown documents inside the database with checksums.
+
+The private database and discovery reports live under `private/`, which is
+ignored by Git. The only data committed for publication is the reviewed,
+sanitized `site/public-data.json` export.
 
 Agent workflow guidance lives in `CLAUDE.md`.
 
@@ -31,40 +34,41 @@ dependencies.
 uv sync
 ```
 
-Generate the static site from the SQLite database:
+Generate the reviewed public-data export, then build the static site from it:
 
 ```bash
-uv run build-site --db partner-tracking.db --output _site
+uv run export-public-data --db private/partner-tracking.db --output site/public-data.json
+uv run build-site --data site/public-data.json --output _site
 uv run validate-site _site
 ```
 
-`build-site` reads `partner-tracking.db` and regenerates `_site`; it does not
-modify the database.
+`export-public-data` selects only fields used by the public site. `build-site`
+does not read SQLite in the publication workflow.
 
 Check the database and run the tests:
 
 ```bash
 uv run python -m unittest discover -s tests -v
-sqlite3 partner-tracking.db 'PRAGMA integrity_check;'
+sqlite3 private/partner-tracking.db 'PRAGMA integrity_check;'
 ```
 
 Check one partner's review state:
 
 ```bash
-uv run partner-tracker --db partner-tracking.db status --partner AWS
+uv run partner-tracker --db private/partner-tracking.db status --partner AWS
 ```
 
 List the active inventory for one partner:
 
 ```bash
-uv run partner-tracker --db partner-tracking.db list --partner Databricks --status active
+uv run partner-tracker --db private/partner-tracking.db list --partner Databricks --status active
 ```
 
 Export an active inventory as Markdown or JSON:
 
 ```bash
-uv run partner-tracker --db partner-tracking.db export --partner IBM --format markdown
-uv run partner-tracker --db partner-tracking.db export --partner IBM --format json
+uv run partner-tracker --db private/partner-tracking.db export --partner IBM --format markdown
+uv run partner-tracker --db private/partner-tracking.db export --partner IBM --format json
 ```
 
 View the available commands:
@@ -86,28 +90,25 @@ uv run partner-tracker --help
 
 The schema lives in one place: the `initialize` function in
 `src/agent_tracker/partner_tracker.py`. There is no migration runner. Change a
-column by editing that function and applying a matching `ALTER TABLE` to
-`partner-tracking.db` by hand. Copy the database first.
+column by editing that function and applying a matching `ALTER TABLE` to the
+private database by hand. Copy the database first.
 
 ## Static website
 
-The published site is live at
-<https://upgraded-fishstick-3811lj9.pages.github.io/>. Access is limited to
-`neo4j-partners` members with read access to this repository, so the link asks
-for GitHub authentication before it serves the site.
-
-Generate the partner-neutral GitHub Pages artifact:
+Generate the partner-neutral GitHub Pages artifact from the committed public
+data export:
 
 ```bash
-uv run build-site --db partner-tracking.db --output _site
+uv run build-site --data site/public-data.json --output _site
 uv run validate-site _site
 ```
 
-Open `_site/index.html` directly or serve `_site` with a local static-file server. The generated site contains a dashboard plus filterable Integration assets and Articles catalogues. It publishes only active direct records, never exposes local paths or internal review actions, and does not need SQLite after generation.
+Open `_site/index.html` directly or serve `_site` with a local static-file server. The generated site contains a dashboard plus filterable Integration assets and Articles catalogues. It publishes only active direct records, never exposes local paths or internal review actions, and does not need SQLite after generation. Public links must use HTTPS, and only an explicit allowlist of harmless query parameters is accepted.
 
 `validate-site` checks that every internal reference resolves inside the site root. It reports how many external links the pages contain, and it does not request them.
 
-The Pages workflow validates the database, runs the complete test suite, rebuilds `_site`, and publishes only that generated directory.
+The Pages workflow validates the public data, runs the complete test suite,
+rebuilds `_site`, and publishes only that generated directory.
 
 ## Discovery setup
 
@@ -120,16 +121,27 @@ cp .env.sample .env
 Run a read-only partner discovery report after you set `BRAVE_API_KEY`:
 
 ```bash
-uv run discover-partner-content --partner AWS --db partner-tracking.db
+uv run discover-partner-content --partner AWS --db private/partner-tracking.db
 ```
 
 Run a read-only GitHub repository change report. `GITHUB_TOKEN` is optional for small public checks and recommended for larger repository batches.
 
 ```bash
-uv run check-partner-repositories --partner AWS --db partner-tracking.db
+uv run check-partner-repositories --partner AWS --db private/partner-tracking.db
 ```
 
-Both scripts write their report to `DISCOVERY_OUTPUT_DIR`, which defaults to `reports`. Neither script writes to the database.
+Both scripts write their report to `DISCOVERY_OUTPUT_DIR`, which defaults to
+`private/reports`. Neither script writes to the database.
+
+### Public-source requirement for local projects
+
+When an agent accepts a local directory into the catalog, it must record the
+canonical HTTPS GitHub URL in `canonical_url` and use it as the primary source
+reference. `local_path` is optional supplemental checkout information, never a
+replacement for the public source. Classify the publisher from the remote
+owner: Neo4j and Neo4j Partners repositories are `neo4j`-published; AWS,
+Databricks, IBM, and Red Hat sources are `partner`-published. Do not infer a
+partner publisher from a directory name.
 
 ## Terms
 
@@ -146,24 +158,6 @@ Both scripts write their report to `DISCOVERY_OUTPUT_DIR`, which defaults to `re
 - **Local checkout:** A supplemental developer reference only. Every published local project must also record its canonical public GitHub URL as the source of record.
 - **Publisher name:** The reviewed public name of the site, account, or repository organization that published an item.
 - **Publisher group:** Neo4j, partner, community, not applicable, or temporarily unclassified.
-- **Markdown archive:** A retired project document stored in SQLite with its checksum and original text.
-
-## Retired document archive
-
-The database stores the previous Markdown documents. List the archived files with this command:
-
-```bash
-uv run partner-tracker --db partner-tracking.db archives
-```
-
-Print one archived document with this command:
-
-```bash
-uv run partner-tracker --db partner-tracking.db archive-show --filename AWS_ARTICLES.md
-```
-
-Archive the current top-level Markdown documents with this command:
-
-```bash
-uv run partner-tracker --db partner-tracking.db archive-markdown --source .
-```
+- **Markdown archive:** A private retired project document stored in local SQLite
+  with its checksum and original text. Do not include archives in the public-data
+  export.

@@ -544,8 +544,8 @@ def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
     root.add_argument(
         "--db",
-        default="partner-tracking.db",
-        help="SQLite database path (default: partner-tracking.db)",
+        default="private/partner-tracking.db",
+        help="private SQLite database path (default: private/partner-tracking.db)",
     )
     commands = root.add_subparsers(dest="command", required=True)
 

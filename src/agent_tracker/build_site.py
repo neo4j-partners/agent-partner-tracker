@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import argparse
+import json
 import shutil
 import sqlite3
 import sys
 import tempfile
 from contextlib import closing
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import parse_qsl, urlsplit
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
@@ -25,14 +26,59 @@ PUBLISHER_GROUP_LABELS = {
     "not_applicable": "Not applicable",
     "unclassified": "Needs classification",
 }
+PUBLIC_QUERY_KEYS = frozenset({"topic"})
+PRIVATE_DATA_MARKERS = (
+    "/users/",
+    "/home/",
+    "brave_api_key",
+    "github_token",
+    "begin private key",
+)
+PUBLIC_ITEM_FIELDS = frozenset(
+    {
+        "id",
+        "partner",
+        "content_type",
+        "title",
+        "summary",
+        "canonical_url",
+        "partner_products",
+        "publisher_name",
+        "publisher_group",
+        "published_date",
+        "published_sort_date",
+        "published_sort_value",
+        "last_checked_date",
+        "publisher_group_label",
+        "content_type_label",
+    }
+)
+PUBLIC_DATA_FIELDS = frozenset(
+    {
+        "integration_assets",
+        "articles",
+        "publisher_metrics",
+        "partner_metrics",
+        "reviews",
+        "data_through",
+        "partners",
+    }
+)
 
 
 def validated_url(value: str | None) -> str | None:
     if not value:
         return None
     parts = urlsplit(value)
-    if parts.scheme not in {"http", "https"} or not parts.netloc:
+    if parts.scheme != "https" or not parts.netloc:
         raise ValueError(f"unsafe public URL: {value}")
+    if parts.username or parts.password:
+        raise ValueError(f"unsafe public URL: {value}")
+    query_keys = {
+        key.lower() for key, _ in parse_qsl(parts.query, keep_blank_values=True)
+    }
+    if not query_keys <= PUBLIC_QUERY_KEYS:
+        raise ValueError(f"unsafe public URL query: {value}")
     return value
 
 
@@ -189,16 +235,70 @@ def site_data(connection: sqlite3.Connection) -> dict[str, object]:
     }
 
 
+def export_public_data(database: Path, output: Path) -> dict[str, object]:
+    """Write the strictly public site projection from a private SQLite catalog."""
+    with closing(tracker.read_only_connection(database)) as connection:
+        data = site_data(connection)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
+        json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    return data
+
+
+def load_public_data(path: Path) -> dict[str, object]:
+    """Load a reviewed public-data export without accepting internal fields."""
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise ValueError(f"invalid public data JSON: {path}") from error
+    if not isinstance(data, dict) or set(data) != PUBLIC_DATA_FIELDS:
+        raise ValueError("public data has an unexpected schema")
+    for key in ("integration_assets", "articles", "reviews", "partners"):
+        if not isinstance(data[key], list):
+            raise ValueError(f"public data field {key} must be a list")
+    for key in ("publisher_metrics", "partner_metrics"):
+        if not isinstance(data[key], dict):
+            raise ValueError(f"public data field {key} must be an object")
+    for item in [*data["integration_assets"], *data["articles"]]:
+        if not isinstance(item, dict) or set(item) != PUBLIC_ITEM_FIELDS:
+            raise ValueError("public data item has an unexpected schema")
+        validated_url(item["canonical_url"])
+    for review in data["reviews"]:
+        if not isinstance(review, dict) or set(review) != {
+            "name",
+            "last_completed_review_date",
+        }:
+            raise ValueError("public review has an unexpected schema")
+    serialized = json.dumps(data, sort_keys=True).lower()
+    if any(marker in serialized for marker in PRIVATE_DATA_MARKERS):
+        raise ValueError("public data contains a private-data marker")
+    return data
+
+
 def render_site(
     database: Path, output: Path, templates: Path, assets: Path
 ) -> dict[str, object]:
+    with closing(tracker.read_only_connection(database)) as connection:
+        data = site_data(connection)
+    return render_data(data, output, templates, assets)
+
+
+def render_public_data(
+    public_data: Path, output: Path, templates: Path, assets: Path
+) -> dict[str, object]:
+    """Generate the site from a checked-in, sanitized public-data export."""
+    return render_data(load_public_data(public_data), output, templates, assets)
+
+
+def render_data(
+    data: dict[str, object], output: Path, templates: Path, assets: Path
+) -> dict[str, object]:
+    """Render a validated public data projection into the static site."""
     if not templates.is_dir():
         raise ValueError(f"template directory does not exist: {templates}")
     if not assets.is_dir():
         raise ValueError(f"asset directory does not exist: {assets}")
-
-    with closing(tracker.read_only_connection(database)) as connection:
-        data = site_data(connection)
 
     environment = Environment(
         loader=FileSystemLoader(templates),
@@ -259,7 +359,9 @@ def build_statistics(data: dict[str, object]) -> str:
 
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
-    root.add_argument("--db", type=Path, default=Path("partner-tracking.db"))
+    source = root.add_mutually_exclusive_group(required=True)
+    source.add_argument("--db", type=Path, help="private SQLite catalog")
+    source.add_argument("--data", type=Path, help="sanitized public-data JSON")
     root.add_argument("--output", type=Path, default=Path("_site"))
     root.add_argument("--templates", type=Path, default=Path("site/templates"))
     root.add_argument("--assets", type=Path, default=Path("site/assets"))
@@ -268,9 +370,13 @@ def parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     args = parser().parse_args()
-    print(f"status: building static site from {args.db}")
+    source = args.db or args.data
+    print(f"status: building static site from {source}")
     try:
-        data = render_site(args.db, args.output, args.templates, args.assets)
+        if args.db:
+            data = render_site(args.db, args.output, args.templates, args.assets)
+        else:
+            data = render_public_data(args.data, args.output, args.templates, args.assets)
     except (OSError, sqlite3.Error, ValueError) as error:
         print(f"status: failed: {error}", file=sys.stderr)
         return 1
