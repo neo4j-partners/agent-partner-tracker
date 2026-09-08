@@ -1,0 +1,16 @@
+{
+  "grounding": {
+    "generic": [
+      {
+        "url": "https://neo4j.com/example/?utm_source=test",
+        "title": "Neo4j and AWS example",
+        "snippets": ["Neo4j provides GraphRAG.", "Amazon Bedrock provides the model."]
+      }
+    ]
+  },
+  "sources": {
+    "https://neo4j.com/example/?utm_source=test": {
+      "age": ["September 8, 2026", "2026-09-08"]
+    }
+  }
+}

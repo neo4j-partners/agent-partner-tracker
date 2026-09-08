@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Public Neo4j partner integration catalogue.">
+    <title>{% block title %}Partner Tracker{% endblock %}</title>
+    <link rel="stylesheet" href="assets/site.css">
+    {% block scripts %}{% endblock %}
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html">Partner Tracker</a>
+        <nav aria-label="Primary navigation">
+          <a{% if current_page == 'index.html' %} aria-current="page"{% endif %} href="index.html">Dashboard</a>
+          <a{% if current_page == 'integration-assets.html' %} aria-current="page"{% endif %} href="integration-assets.html">Integrations</a>
+          <a{% if current_page == 'articles.html' %} aria-current="page"{% endif %} href="articles.html">Articles</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main-content">
+      {% block content %}{% endblock %}
+    </main>
+    <footer>
+      <p>Generated from the reviewed partner tracker catalogue. Data reviewed through {{ data_through or "Not recorded" }}.</p>
+    </footer>
+  </body>
+</html>

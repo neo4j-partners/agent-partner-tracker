@@ -1,0 +1,13 @@
+{
+  "web": {
+    "results": [
+      {
+        "url": "https://aws.amazon.com/example/#details",
+        "title": "AWS and Neo4j example",
+        "description": "AWS uses Neo4j for a knowledge graph.",
+        "extra_snippets": ["Amazon Bedrock supports the application."],
+        "page_age": "2026-09-08"
+      }
+    ]
+  }
+}

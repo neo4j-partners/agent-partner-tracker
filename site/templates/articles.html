@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Articles | Partner Tracker{% endblock %}
+{% block scripts %}<script src="assets/tables.js" defer></script>{% endblock %}
+
+{% block content %}
+  <section class="page-intro" aria-labelledby="page-title">
+    <p class="eyebrow">Catalogue</p>
+    <h1 id="page-title">Articles</h1>
+    <p class="lede">{{ items|length }} active, direct public references.</p>
+  </section>
+
+  <section class="catalogue" data-catalogue data-total="{{ items|length }}" aria-labelledby="results-heading">
+    <form class="filters" aria-label="Filter articles">
+      <label>Partner
+        <select data-filter="partner" name="partner">
+          <option value="">All partners</option>
+          {% for partner in partners %}<option value="{{ partner }}">{{ partner }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Publisher
+        <select data-filter="publisher" name="publisher">
+          <option value="">All publishers</option>
+          {% for group in ('neo4j', 'partner', 'community') %}
+            <option value="{{ group }}">{{ publisher_group_labels[group] }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button class="clear-button" type="button" data-clear-filters>Clear filters</button>
+    </form>
+    <noscript><p class="notice">JavaScript is off. All records remain visible, but sorting and filters are unavailable.</p></noscript>
+    <div class="results-summary">
+      <h2 id="results-heading">Results</h2>
+      <p data-result-count aria-live="polite">{{ items|length }} records</p>
+    </div>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Articles table">
+      <table>
+        <thead>
+          <tr>
+            <th aria-sort="none"><button type="button" data-sort-key="partner">Partner</button></th>
+            <th aria-sort="none"><button type="button" data-sort-key="publisher">Publisher</button></th>
+            <th aria-sort="none"><button type="button" data-sort-key="title">Title</button></th>
+            <th>Summary</th>
+            <th aria-sort="none"><button type="button" data-sort-key="published">Published</button></th>
+            <th aria-sort="none"><button type="button" data-sort-key="checked">Last checked</button></th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+            <tr data-partner="{{ item.partner }}" data-publisher="{{ item.publisher_group }}" data-type="{{ item.content_type }}">
+              <td data-column="partner">{{ item.partner }}</td>
+              <td data-column="publisher">{{ item.publisher_name }}</td>
+              <td data-column="title">{{ item.title }}</td>
+              <td>{{ item.summary }}</td>
+              <td data-column="published" data-sort-value="{{ item.published_sort_value }}">{{ item.published_date or "Not recorded" }}</td>
+              <td data-column="checked" data-sort-value="{{ item.last_checked_date }}">{{ item.last_checked_date }}</td>
+              <td><a href="{{ item.canonical_url }}">Open</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}

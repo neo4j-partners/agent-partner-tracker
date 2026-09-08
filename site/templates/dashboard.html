@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Partner Tracker Dashboard{% endblock %}
+
+{% block content %}
+  <section class="hero" aria-labelledby="page-title">
+    <p class="eyebrow">Neo4j partner catalogue</p>
+    <h1 id="page-title">Integration assets and articles</h1>
+    <p class="lede">A reviewed public inventory for AWS, Databricks, and IBM. Browse {{ integration_assets|length + articles|length }} active, direct records without a runtime database or API.</p>
+    <p class="snapshot">Data reviewed through <strong>{{ data_through or "Not recorded" }}</strong></p>
+  </section>
+
+  <section aria-labelledby="catalogue-heading">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Catalogue</p>
+        <h2 id="catalogue-heading">Current inventory</h2>
+      </div>
+    </div>
+    <div class="metric-grid metric-grid-primary">
+      <article class="metric-card">
+        <p class="metric-label">Integration assets</p>
+        <p class="metric-value">{{ integration_assets|length }}</p>
+        <p>Local samples and public repositories.</p>
+        <a href="integration-assets.html">View integrations <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="metric-card">
+        <p class="metric-label">Active articles</p>
+        <p class="metric-value">{{ articles|length }}</p>
+        <p>Published references across all partners.</p>
+        <a href="articles.html">View articles <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="metric-card{% if needs_classification %} metric-warning{% endif %}">
+        <p class="metric-label">Needs classification</p>
+        <p class="metric-value">{{ needs_classification }}</p>
+        <p>{% if needs_classification %}Resolve before the next release.{% else %}All public sources are classified.{% endif %}</p>
+      </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="publisher-heading">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Public sources</p>
+        <h2 id="publisher-heading">Publisher breakdown</h2>
+      </div>
+      <p>Counts include public repositories and articles. Local-only samples are excluded.</p>
+    </div>
+    <div class="metric-grid">
+      {% for group in ('neo4j', 'partner', 'community') %}
+        {% set metric = publisher_metrics[group] %}
+        <article class="metric-card publisher-card">
+          <p class="metric-label">{{ metric.label }} published</p>
+          <p class="metric-value">{{ metric.total }}</p>
+          <div class="card-links">
+            <a href="integration-assets.html?publisher={{ group }}">{{ metric.integration_count }} repositories</a>
+            <a href="articles.html?publisher={{ group }}">{{ metric.article_count }} articles</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="review-panel" aria-labelledby="review-heading">
+    <div>
+      <p class="eyebrow">Freshness</p>
+      <h2 id="review-heading">Partner review dates</h2>
+      <p>These are content-review dates, not deployment timestamps.</p>
+    </div>
+    <dl>
+      {% for review in reviews %}
+        <div>
+          <dt>{{ review.name }}</dt>
+          <dd>{{ review.last_completed_review_date or "Not reviewed" }}</dd>
+        </div>
+      {% endfor %}
+    </dl>
+  </section>
+{% endblock %}
