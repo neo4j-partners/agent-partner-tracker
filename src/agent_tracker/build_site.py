@@ -131,6 +131,11 @@ def site_data(connection: sqlite3.Connection) -> dict[str, object]:
 
     integration_assets = public_rows(connection, ("local_sample", "repository"))
     articles = public_rows(connection, ("public_reference",))
+    missing_article_urls = sum(1 for article in articles if not article["canonical_url"])
+    if missing_article_urls:
+        raise ValueError(
+            f"{missing_article_urls} public articles are missing a canonical URL"
+        )
     reviews = [
         dict(row)
         for row in connection.execute(
@@ -142,21 +147,10 @@ def site_data(connection: sqlite3.Connection) -> dict[str, object]:
         f"""SELECT MAX(ci.last_checked_date)
             FROM content_items AS ci WHERE {PUBLIC_WHERE}"""
     ).fetchone()[0]
-    needs_classification = connection.execute(
-        f"""
-        SELECT COUNT(*)
-        FROM content_items AS ci
-        WHERE {PUBLIC_WHERE}
-          AND ci.content_type IN ('repository', 'public_reference')
-          AND ci.canonical_url IS NOT NULL
-          AND ci.publisher_group = 'unclassified'
-        """
-    ).fetchone()[0]
     return {
         "integration_assets": integration_assets,
         "articles": articles,
         "publisher_metrics": publisher_metrics(connection),
-        "needs_classification": needs_classification,
         "reviews": reviews,
         "data_through": data_through,
         "partners": sorted({row["partner"] for row in integration_assets + articles}),

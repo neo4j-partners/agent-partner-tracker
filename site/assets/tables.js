@@ -5,11 +5,15 @@
   if (!catalogue) return;
 
   const table = catalogue.querySelector("table");
+  const tableScroll = catalogue.querySelector(".table-scroll");
   const body = table.querySelector("tbody");
   const rows = Array.from(body.rows);
+  const total = rows.length;
   const controls = Array.from(catalogue.querySelectorAll("[data-filter]"));
   const count = catalogue.querySelector("[data-result-count]");
-  const clear = catalogue.querySelector("[data-clear-filters]");
+  const clearButtons = Array.from(catalogue.querySelectorAll("[data-clear-filters]"));
+  const chips = catalogue.querySelector("[data-active-filters]");
+  const emptyState = catalogue.querySelector("[data-empty-state]");
   const collator = new Intl.Collator(undefined, {
     numeric: true,
     sensitivity: "base",
@@ -28,6 +32,30 @@
     });
   }
 
+  function renderChips() {
+    if (!chips) return;
+    chips.innerHTML = "";
+    controls.forEach((control) => {
+      if (!control.value) return;
+      const label = control.dataset.label || control.name;
+      const optionText = control.options[control.selectedIndex].textContent;
+      const chip = document.createElement("span");
+      chip.className = "filter-chip";
+      const text = document.createElement("span");
+      text.textContent = `${label}: ${optionText}`;
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.setAttribute("aria-label", `Remove ${label.toLowerCase()} filter`);
+      remove.textContent = "×";
+      remove.addEventListener("click", () => {
+        control.value = "";
+        filterRows({ updateHistory: true });
+      });
+      chip.append(text, remove);
+      chips.append(chip);
+    });
+  }
+
   function filterRows({ updateHistory = false } = {}) {
     let visible = 0;
     rows.forEach((row) => {
@@ -37,7 +65,12 @@
       row.hidden = !matches;
       if (matches) visible += 1;
     });
-    count.textContent = `${visible} ${visible === 1 ? "record" : "records"}`;
+    count.textContent = visible === total
+      ? `${total} ${total === 1 ? "record" : "records"}`
+      : `${visible} of ${total} ${total === 1 ? "record" : "records"}`;
+    if (tableScroll) tableScroll.hidden = visible === 0;
+    if (emptyState) emptyState.hidden = visible !== 0;
+    renderChips();
 
     if (updateHistory) {
       const params = new URLSearchParams();
@@ -77,12 +110,14 @@
   controls.forEach((control) => {
     control.addEventListener("change", () => filterRows({ updateHistory: true }));
   });
-  clear.addEventListener("click", () => {
-    controls.forEach((control) => {
-      control.value = "";
+  clearButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      controls.forEach((control) => {
+        control.value = "";
+      });
+      filterRows({ updateHistory: true });
+      controls[0].focus();
     });
-    filterRows({ updateHistory: true });
-    controls[0].focus();
   });
   table.querySelectorAll("[data-sort-key]").forEach((button) => {
     button.addEventListener("click", () => sortRows(button));

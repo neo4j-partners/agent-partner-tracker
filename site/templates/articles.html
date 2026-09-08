@@ -13,14 +13,14 @@
   <section class="catalogue" data-catalogue data-total="{{ items|length }}" aria-labelledby="results-heading">
     <form class="filters" aria-label="Filter articles">
       <label>Partner
-        <select data-filter="partner" name="partner">
+        <select data-filter="partner" name="partner" data-label="Partner">
           <option value="">All partners</option>
           {% for partner in partners %}<option value="{{ partner }}">{{ partner }}</option>{% endfor %}
         </select>
       </label>
-      <label>Publisher
-        <select data-filter="publisher" name="publisher">
-          <option value="">All publishers</option>
+      <label>Publisher group
+        <select data-filter="publisher" name="publisher" data-label="Publisher group">
+          <option value="">All publisher groups</option>
           {% for group in ('neo4j', 'partner', 'community') %}
             <option value="{{ group }}">{{ publisher_group_labels[group] }}</option>
           {% endfor %}
@@ -28,6 +28,7 @@
       </label>
       <button class="clear-button" type="button" data-clear-filters>Clear filters</button>
     </form>
+    <div class="active-filters" data-active-filters aria-live="polite"></div>
     <noscript><p class="notice">JavaScript is off. All records remain visible, but sorting and filters are unavailable.</p></noscript>
     <div class="results-summary">
       <h2 id="results-heading">Results</h2>
@@ -55,11 +56,15 @@
               <td>{{ item.summary }}</td>
               <td data-column="published" data-sort-value="{{ item.published_sort_value }}">{{ item.published_date or "Not recorded" }}</td>
               <td data-column="checked" data-sort-value="{{ item.last_checked_date }}">{{ item.last_checked_date }}</td>
-              <td><a href="{{ item.canonical_url }}">Open</a></td>
+              <td><a href="{{ item.canonical_url }}" aria-label="Open: {{ item.title }}">Open</a></td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
+    <p class="empty-state" data-empty-state hidden>
+      No articles match the selected filters.
+      <button class="clear-button" type="button" data-clear-filters>Clear filters</button>
+    </p>
   </section>
 {% endblock %}

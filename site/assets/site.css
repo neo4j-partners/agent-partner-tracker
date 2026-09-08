@@ -8,7 +8,6 @@
   --accent-soft: #e9f7f5;
   --surface: #ffffff;
   --background: #f6f8fb;
-  --warning: #9a3412;
   --warning-soft: #fff7ed;
   --shadow: 0 14px 40px rgb(23 32 51 / 8%);
 }
@@ -197,6 +196,10 @@ section {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.metric-grid-primary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .metric-card,
 .review-panel,
 .catalogue {
@@ -236,15 +239,6 @@ section {
   letter-spacing: -0.06em;
   line-height: 1;
   margin: 1.2rem 0 0.4rem;
-}
-
-.metric-warning {
-  background: var(--warning-soft);
-  border-color: #fed7aa;
-}
-
-.metric-warning .metric-value {
-  color: var(--warning) !important;
 }
 
 .card-links {
@@ -343,6 +337,50 @@ select,
   padding: 0.8rem 1rem;
 }
 
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: -0.75rem 0 1.5rem;
+}
+
+.active-filters:empty {
+  margin: 0;
+}
+
+.filter-chip {
+  align-items: center;
+  background: var(--accent-soft);
+  border-radius: 999px;
+  color: var(--accent-dark);
+  display: inline-flex;
+  font-size: 0.82rem;
+  font-weight: 700;
+  gap: 0.4rem;
+  padding: 0.35rem 0.5rem 0.35rem 0.75rem;
+}
+
+.filter-chip button {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.1rem;
+}
+
+.empty-state {
+  color: var(--muted);
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.empty-state .clear-button {
+  display: inline-block;
+  margin-top: 1rem;
+}
+
 .results-summary {
   align-items: baseline;
   display: flex;
@@ -396,6 +434,22 @@ tbody tr:hover {
 
 tbody tr[hidden] {
   display: none;
+}
+
+.table-scroll th:first-child,
+.table-scroll td:first-child {
+  background: var(--surface);
+  left: 0;
+  position: sticky;
+}
+
+thead th:first-child {
+  background: var(--accent-soft);
+  z-index: 1;
+}
+
+tbody tr:hover td:first-child {
+  background: #f9fcfc;
 }
 
 th button {
