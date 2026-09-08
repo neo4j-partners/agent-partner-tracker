@@ -34,6 +34,15 @@ dependencies.
 uv sync
 ```
 
+Publish a reviewed release. This exports public data from the ignored private
+catalog, runs the tests and static-site checks, stages tracked public changes and
+`site/public-data.json`, then commits and pushes. It refuses private file
+additions. Pass a descriptive commit message:
+
+```bash
+uv run publish --message "Publish reviewed partner data"
+```
+
 Generate the reviewed public-data export, then build the static site from it:
 
 ```bash

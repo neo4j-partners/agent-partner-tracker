@@ -1816,9 +1816,9 @@
       "published_date": null,
       "published_sort_date": null,
       "published_sort_value": "9999-12-31",
-      "publisher_group": "partner",
-      "publisher_group_label": "Partner",
-      "publisher_name": "AWS",
+      "publisher_group": "community",
+      "publisher_group_label": "Community",
+      "publisher_name": "Elizabeth Fuentes",
       "summary": "AWS Workshop Studio content teaching Strands agents grounded by Neo4j GraphRAG on Amazon Bedrock, contrasting semantic search with graph-traversal-based evidence retrieval.",
       "title": "Grounded AI Agents with Neo4j and AWS (Workshop)"
     },
@@ -2372,9 +2372,9 @@
   "publisher_metrics": {
     "community": {
       "article_count": 17,
-      "integration_count": 0,
+      "integration_count": 1,
       "label": "Community",
-      "total": 17
+      "total": 18
     },
     "neo4j": {
       "article_count": 55,
@@ -2384,9 +2384,9 @@
     },
     "partner": {
       "article_count": 31,
-      "integration_count": 1,
+      "integration_count": 0,
       "label": "Partner",
-      "total": 32
+      "total": 31
     }
   },
   "reviews": [

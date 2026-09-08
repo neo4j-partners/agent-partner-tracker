@@ -14,6 +14,7 @@ export-public-data = "agent_tracker.export_public_data:main"
 check-partner-repositories = "agent_tracker.check_partner_repositories:main"
 discover-partner-content = "agent_tracker.discover_partner_content:main"
 partner-tracker = "agent_tracker.partner_tracker:main"
+publish = "agent_tracker.publish:main"
 validate-site = "agent_tracker.validate_site:main"
 
 [build-system]
