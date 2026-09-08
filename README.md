@@ -1,5 +1,7 @@
 # Partner Content Tracker
 
+[View the public partner catalogue](https://neo4j-partners.github.io/agent-partner-tracker/).
+
 - Tracks how Neo4j and AWS, Databricks, or IBM work better together.
 - Explains the role of Neo4j, the role of the partner product, and the result of the integration.
 - Stores private content, partner review state, and review summaries in local SQLite.
@@ -158,6 +160,9 @@ subdirectories, read each example's README and implementation, and add a
 separate record for every distinct sample using its GitHub tree URL. Capture
 the Neo4j capability, partner services, authentication/deployment model,
 dependencies, and documented limitations so the catalog remains actionable.
+The remote canonical GitHub branch or checked commit is authoritative: refresh
+or inspect it when a local clone is stale or missing expected paths before
+deciding that an example is documentation-only.
 
 ## Terms
 
