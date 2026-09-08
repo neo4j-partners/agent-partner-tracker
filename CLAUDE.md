@@ -6,8 +6,8 @@ Start with the partner's saved review state. Check known technical sources befor
 
 1. Run `status` for AWS, Databricks, or IBM. Read the last review date and the next action.
 2. Run `list` for active items. Run it again for watched, excluded, or archived items when they affect the review.
-3. Check the saved high-value sources first. Use a narrow date-bounded search only when those sources leave a clear gap.
-4. Add direct technical integrations as active items. Explain the Neo4j role, partner role, and joint result in the summary. When a source is a repository, inspect its structure (subdirectories, README, multiple example or sample folders) for more than one distinct sample. Log each nested sample as its own content item, with its own title, summary, and evidence, instead of collapsing the whole repository into one item; `neo4j-partners/graph-enrichment` is a known repository that contains more than one sample. Add useful future candidates as watch items. Keep thin pages, duplicates, and index pages as excluded items when that decision prevents repeat work.
+3. Run both discovery passes for every partner review: (a) a known-source pass over saved high-value sources and tracked repositories, and (b) an expansion pass for third-party technical examples. The expansion pass must cover partner-owned repositories, official blogs, solution architectures, workshops, samples, marketplace listings, connector documentation, and credible community repositories. Do not limit expansion searches to recent content unless the review is explicitly change-only. Use at least 12 targeted queries per partner, inspect at least the first 30 relevant results across multiple domains, and record excluded candidates so they are not repeatedly evaluated.
+4. Add direct technical integrations as active items. Explain the Neo4j role, partner role, and joint result in the summary. Apply the repository deep-walk rule before adding a repository: enumerate its partner-relevant subdirectories, read each nested README and implementation entry point, and inspect deployment, authentication, dependencies, and documented limitations. Log every distinct nested sample as its own content item, using its canonical GitHub `tree/main/<subpath>` URL as both the source and evidence. Record the concrete Neo4j capability, partner services, outcome, and any prerequisite or dependency in the item's summary or decision reason. Do not collapse a multi-example repository into one umbrella item; use the umbrella only as a discovery index. `neo4j-labs/neo4j-agent-integrations` and `neo4j-partners/graph-enrichment` are required deep-walk examples. Add useful future candidates as watch items. Keep thin pages, duplicates, and index pages as excluded items when that decision prevents repeat work.
 5. Update an existing item when the URL, source, or decision already exists. The tracker normalizes URLs, so a tracking link and its canonical URL identify the same item.
 6. Start a review with status `in_progress`. Finalize the same review ID with status `complete` or `no_change` after every planned check has a result.
 7. Export the active inventory before you finish. The export confirms that the catalog works without the retired source documents.
@@ -49,6 +49,16 @@ Use parallel agents for independent discovery and verification work. Keep databa
 - **Databricks:** Check the Neo4j Spark documentation, connector releases, the Databricks quickstart, and the tracked partner workshops.
 - **IBM:** Check IBM watsonx.data intelligence, IBM Instana, the Neo4j APOC Watson documentation, and the Neo4j Red Hat deployment guidance.
 
+## Required third-party integration discovery
+
+A third-party integration example is a runnable sample, reference architecture, notebook, workshop, connector implementation, deployment guide, or documented solution that uses Neo4j with a partner product. It need not be published by Neo4j or the partner, but it must have technical implementation evidence.
+
+For each partner, search official partner GitHub organizations and documentation; Neo4j GitHub organizations, Labs, Contrib, and partner repositories; partner blogs, architecture centers, workshops, and solution libraries; community GitHub repositories with source code and setup instructions; and conference sessions, solution accelerators, or marketplace examples that link to implementation evidence.
+
+Use query families, not one broad query: combine `Neo4j`, a specific partner product, and an artifact type such as `GitHub`, `sample`, `notebook`, `workshop`, `architecture`, or `deployment`. For example: `Neo4j Bedrock GitHub`, `Neo4j Glue notebook`, `Neo4j Databricks Mosaic AI`, `Neo4j Unity Catalog`, `Neo4j watsonx sample`, and `Neo4j OpenShift deployment`.
+
+Minimum coverage targets per full review are 10 verified AWS candidates, spanning Bedrock, SageMaker, Lambda, ECS or EKS, Glue, Neptune migration or coexistence, OpenSearch, and IAM or security; 10 verified Databricks candidates, spanning the Spark Connector, Unity Catalog, Mosaic AI, Model Serving, Vector Search, Lakehouse or Delta, Apps, and workflows; and 8 verified IBM candidates, spanning watsonx, watsonx.data, watsonx.ai, OpenShift or Red Hat, Cloud Pak for Data, Instana, and data governance. A review is incomplete until every listed product area is searched or explicitly recorded as `no technical example found`.
+
 ## Content discovery tools
 
 Use these tools to find recent partner content. Verify useful candidates before you add them to the tracker.
@@ -57,7 +67,7 @@ Use these tools to find recent partner content. Verify useful candidates before 
 - **Brave Web Search:** Use this to find a broad set of candidate URLs. Use a custom freshness range and partner-specific `site:` queries.
 - **Brave Goggles:** Use this to boost trusted technical domains, such as Neo4j, AWS, Databricks, IBM, Red Hat, and GitHub.
 - **Cached page retrieval:** Use this after discovery to verify a small set of candidates. Read the canonical page before adding an item.
-- **GitHub API:** Check tracked repositories for new releases, commits, issues, and README changes. This finds product changes that web search can miss. Also check whether a repository contains more than one distinct sample, such as `neo4j-partners/graph-enrichment`, and add each nested sample as its own content item.
+- **GitHub API:** Check tracked repositories for new releases, commits, issues, and README changes. This finds product changes that web search can miss. For a multi-example repository, also list nested README files and implementation directories, capture the source commit or release checked, and add each verified partner-specific example as its own content item rather than treating the repository root as sufficient evidence.
 
 The project includes a discovery script and a repository-change script. Both scripts read `.env`, write review reports, and never change the database. A coordinator verifies and classifies every candidate before it becomes an item.
 

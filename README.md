@@ -152,6 +152,13 @@ owner: Neo4j and Neo4j Partners repositories are `neo4j`-published; AWS,
 Databricks, IBM, and Red Hat sources are `partner`-published. Do not infer a
 partner publisher from a directory name.
 
+For a repository that contains multiple integrations, the repository root is a
+discovery index, not a single catalog entry. Walk its partner-relevant
+subdirectories, read each example's README and implementation, and add a
+separate record for every distinct sample using its GitHub tree URL. Capture
+the Neo4j capability, partner services, authentication/deployment model,
+dependencies, and documented limitations so the catalog remains actionable.
+
 ## Terms
 
 - **Partner:** AWS, Databricks, or IBM. Each partner has its own inventory and review state.

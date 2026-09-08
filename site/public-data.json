@@ -1942,6 +1942,23 @@
       "title": "Neo4j MCP Agents on AgentCore Runtime"
     },
     {
+      "canonical_url": "https://github.com/neo4j-labs/neo4j-agent-integrations/tree/main/aws-agentcore/samples/1-mcp-runtime-docker",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 156,
+      "last_checked_date": "2026-09-08",
+      "partner": "AWS",
+      "partner_products": "Amazon Bedrock AgentCore Runtime, IAM, CDK, ECR, CloudWatch, X-Ray",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Labs",
+      "summary": "Neo4j MCP exposes graph tools from a Docker runtime; Amazon Bedrock AgentCore Runtime, IAM, CDK, and ECR or Marketplace host and secure it; together they provide an IAM-signed MCP service for Neo4j agent queries.",
+      "title": "Neo4j MCP Docker runtime on Amazon Bedrock AgentCore"
+    },
+    {
       "canonical_url": "https://github.com/neo4j-partners/aws-starter/tree/main/neo4j-agentcore-mcp-server",
       "content_type": "repository",
       "content_type_label": "Repository",
@@ -2008,23 +2025,6 @@
       "publisher_name": "Neo4j Labs",
       "summary": "Converts unstructured documents and media into Neo4j knowledge graphs using LLMs and GraphRAG-oriented pipelines.",
       "title": "neo4j-labs/llm-graph-builder"
-    },
-    {
-      "canonical_url": "https://github.com/neo4j-labs/neo4j-agent-integrations",
-      "content_type": "repository",
-      "content_type_label": "Repository",
-      "id": 18,
-      "last_checked_date": "2026-09-08",
-      "partner": "AWS",
-      "partner_products": "AWS",
-      "published_date": null,
-      "published_sort_date": null,
-      "published_sort_value": "9999-12-31",
-      "publisher_group": "neo4j",
-      "publisher_group_label": "Neo4j",
-      "publisher_name": "Neo4j Labs",
-      "summary": "Central catalog of Neo4j integrations for agent frameworks and platforms, including AWS AgentCore, AWS Strands, Databricks, LangChain, LangGraph, Google ADK, and Microsoft agent platforms.",
-      "title": "neo4j-labs/neo4j-agent-integrations"
     },
     {
       "canonical_url": "https://github.com/neo4j-partners/aws-databricks-neo4j-lab",
@@ -2146,6 +2146,23 @@
       "title": "neo4j/neo4j-graphrag-python"
     },
     {
+      "canonical_url": "https://github.com/neo4j-labs/neo4j-agent-integrations/tree/main/aws-agentcore/samples/2-gateway-external-mcp",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 157,
+      "last_checked_date": "2026-09-08",
+      "partner": "AWS",
+      "partner_products": "Amazon Bedrock AgentCore Gateway, Cognito, Lambda, Secrets Manager, ECS Fargate, ALB, ACM, Route53, VPC",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Labs",
+      "summary": "Neo4j MCP runs as a read-only Fargate backend; Amazon Bedrock AgentCore Gateway, Cognito, Lambda, Secrets Manager, and ECS authenticate and route requests; together they isolate database credentials behind an OAuth-protected MCP endpoint.",
+      "title": "OAuth-protected Neo4j MCP gateway on AgentCore"
+    },
+    {
       "canonical_url": "https://github.com/neo4j-partners/aws-starter/tree/main/infra-samples/simple-oauth-gateway",
       "content_type": "repository",
       "content_type_label": "Repository",
@@ -2212,6 +2229,40 @@
       "publisher_name": "Neo4j Partners",
       "summary": "Earlier AWS Workshop Studio\u2013scaffolded iteration of the grounded-agent/Neo4j GraphRAG workshop content later refined into sample-stop-ai-agent-hallucinations-workshop.",
       "title": "Stop AI Agent Hallucinations Workshop (AWS Workshop Studio Template)"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-labs/neo4j-agent-integrations/tree/main/aws-strands-agents",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 160,
+      "last_checked_date": "2026-09-08",
+      "partner": "AWS",
+      "partner_products": "Strands Agents SDK, Amazon Bedrock, AgentCore Runtime, Gateway, Memory, Cognito, Secrets Manager, S3, IAM",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Labs",
+      "summary": "Neo4j MCP supplies graph research tools; AWS Strands, Bedrock, AgentCore Runtime, Gateway, Memory, Cognito, and Secrets Manager run the agent; together they deliver OAuth-isolated graph research with persisted user preferences.",
+      "title": "Strands research agent with Neo4j through AgentCore Gateway"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-labs/neo4j-agent-integrations/tree/main/aws-agentcore/samples/3-mcp-runtime-neo4j-sdk",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 158,
+      "last_checked_date": "2026-09-08",
+      "partner": "AWS",
+      "partner_products": "Amazon Bedrock AgentCore Runtime, S3, Secrets Manager, IAM, CDK, CloudWatch, X-Ray",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Labs",
+      "summary": "Neo4j Python driver powers typed FastMCP graph-query tools; Amazon Bedrock AgentCore Runtime, S3, Secrets Manager, and CDK deploy the service; together they provide an extensible custom MCP implementation for AWS agents.",
+      "title": "Typed Neo4j Python MCP runtime on AgentCore"
     },
     {
       "canonical_url": "https://github.com/neo4j-partners/databricks-neo4j-workshop",
@@ -2348,16 +2399,33 @@
       "publisher_name": "Neo4j",
       "summary": "Primary maintained implementation repository for bidirectional Neo4j and Spark DataSource access.",
       "title": "neo4j/neo4j-spark-connector"
+    },
+    {
+      "canonical_url": "https://github.com/neo4j-labs/neo4j-agent-integrations/tree/main/databricks-agent-bricks/samples/3-official-mcp-server",
+      "content_type": "repository",
+      "content_type_label": "Repository",
+      "id": 163,
+      "last_checked_date": "2026-09-08",
+      "partner": "Databricks",
+      "partner_products": "Databricks Apps, Secret scopes, Asset Bundles, Agent Bricks, Playground, FastAPI",
+      "published_date": null,
+      "published_sort_date": null,
+      "published_sort_value": "9999-12-31",
+      "publisher_group": "neo4j",
+      "publisher_group_label": "Neo4j",
+      "publisher_name": "Neo4j Labs",
+      "summary": "The official Neo4j MCP server exposes read-only general graph tools; Databricks Apps, Secret scopes, Asset Bundles, and Agent Bricks deploy and consume it; together they provide a runnable Workspace-authenticated Neo4j MCP service.",
+      "title": "Official Neo4j MCP server on Databricks Apps"
     }
   ],
   "partner_metrics": {
     "AWS": {
       "article_count": 92,
-      "integration_count": 27
+      "integration_count": 30
     },
     "Databricks": {
       "article_count": 6,
-      "integration_count": 8
+      "integration_count": 9
     },
     "IBM": {
       "article_count": 5,
@@ -2378,9 +2446,9 @@
     },
     "neo4j": {
       "article_count": 55,
-      "integration_count": 34,
+      "integration_count": 38,
       "label": "Neo4j",
-      "total": 89
+      "total": 93
     },
     "partner": {
       "article_count": 31,
